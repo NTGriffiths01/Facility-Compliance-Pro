@@ -11,7 +11,7 @@ export default function Login({ backendUrl, onLogin }) {
     setLoading(true)
     setError('')
     try {
-      const res = await fetch(`${backendUrl}/api/auth/login`, {
+      const res = await fetch(`${backendUrl}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
