@@ -99,7 +99,11 @@ async def startup_event():
         mongo_client = AsyncIOMotorClient(MONGO_URL)
         # Validate connectivity
         await mongo_client.admin.command("ping")
-        db = mongo_client["worldclass_app"]
+        # Derive DB name from URI path if provided (e.g., .../madoc)
+        from urllib.parse import urlparse
+        parsed = urlparse(MONGO_URL)
+        db_name = parsed.path.strip("/") or "worldclass_app"
+        db = mongo_client[db_name]
         users_col = db["users"]
         await users_col.create_index("email", unique=True)
         default_email = "Nolan.Griffiths@doc.state.ma.us"
