@@ -1,0 +1,1 @@
+export default function FunctionalTesting(){return (<div className='container'><h1>Functional Testing</h1><p>Auto-generated tasks per Attachment #4.</p></div>)}

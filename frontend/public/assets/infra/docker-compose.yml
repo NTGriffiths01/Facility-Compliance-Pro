@@ -1,0 +1,26 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_PASSWORD: madoc
+      POSTGRES_USER: madoc
+      POSTGRES_DB: madoc
+    ports: ["5432:5432"]
+  api:
+    build:
+      context: ../apps/api
+      dockerfile: Dockerfile
+    environment:
+      DATABASE_URL: postgresql+psycopg://madoc:madoc@db:5432/madoc
+    volumes:
+      - ../policy:/app/policy:ro
+    ports: ["8080:8080"]
+    depends_on: [db]
+  web:
+    build:
+      context: ../apps/web
+      dockerfile: Dockerfile
+    environment:
+      NEXT_PUBLIC_API_BASE: http://localhost:8080/api
+    ports: ["3000:3000"]
+    depends_on: [api]
