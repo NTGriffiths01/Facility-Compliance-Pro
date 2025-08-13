@@ -1,4 +1,4 @@
-const base = (import.meta.env.REACT_APP_BACKEND_URL || '/api').replace(/\/$/, '')
+const base = (import.meta.env.REACT_APP_BACKEND_URL || '').replace(/\/$/, '') + '/api'
 
 async function json(req) {
   if (!req.ok) {
