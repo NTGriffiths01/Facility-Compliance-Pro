@@ -9,19 +9,28 @@ export function BulletsSkeleton() {
     <div className="mt-6 grid gap-2 md:grid-cols-3">
       {[0,1,2].map(i => (
         <div key={i} className="flex items-center gap-3 rounded-lg border bg-white p-3">
-          <div className="h-7 w-7 rounded-md bg-gray-200 animate-pulse" />
-          <div className="h-4 w-48 rounded bg-gray-200 animate-pulse" />
+          <Skeleton className="h-7 w-7 rounded-md" />
+          <Skeleton className="h-4 w-40" />
         </div>
       ))}
     </div>
   )
 }
 
-export function CardsSkeleton() {
+export function CardsSkeleton({ count = 6 }) {
   return (
     <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-      {Array.from({ length: 6 }).map((_, i) => (
-        <Skeleton key={i} className="h-24 border" />
+      {Array.from({length: count}).map((_, i) => (
+        <div key={i} className="rounded-xl border bg-white p-5">
+          <div className="flex items-center gap-4">
+            <Skeleton className="h-10 w-10 rounded-md" />
+            <div className="flex-1">
+              <Skeleton className="h-4 w-32 mb-2" />
+              <Skeleton className="h-3 w-48" />
+            </div>
+          </div>
+          <Skeleton className="h-1 w-full mt-4" />
+        </div>
       ))}
     </div>
   )

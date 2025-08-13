@@ -1,33 +1,32 @@
-const BASE_URL = (import.meta.env.REACT_APP_BACKEND_URL || '').replace(/\/$/, '')
+const base = (import.meta.env.REACT_APP_BACKEND_URL || '/api').replace(/\/$/, '')
 
-async function handle(res) {
-  if (!res.ok) {
-    const text = await res.text().catch(() => '')
-    const msg = text || res.statusText || 'Request failed'
-    throw new Error(msg)
+async function json(req) {
+  if (!req.ok) {
+    const msg = await req.text().catch(() => '')
+    throw new Error(msg || `HTTP ${req.status}`)
   }
-  return res.json()
+  return req.json()
 }
 
 export async function login(email, password) {
-  const res = await fetch(`${BASE_URL}/auth/login`, {
+  const r = await fetch(`${base}/auth/login`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {'Content-Type':'application/json'},
     body: JSON.stringify({ email, password })
   })
-  return handle(res)
+  return json(r) // { access_token, token_type }
 }
 
 export async function getMe(token) {
-  const res = await fetch(`${BASE_URL}/me`, {
+  const r = await fetch(`${base}/me`, {
     headers: { Authorization: `Bearer ${token}` }
   })
-  return handle(res)
+  return json(r) // { id, email }
 }
 
 export async function getPreview(token) {
-  const res = await fetch(`${BASE_URL}/preview`, {
+  const r = await fetch(`${base}/preview`, {
     headers: { Authorization: `Bearer ${token}` }
   })
-  return handle(res)
+  return json(r) // { title, subtitle, bullets[] }
 }

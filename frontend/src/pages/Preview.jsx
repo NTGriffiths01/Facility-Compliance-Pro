@@ -1,48 +1,39 @@
 import React, { useEffect, useState } from 'react'
 import SectionCard from '../components/SectionCard'
-import { getPreview } from '../lib/api'
 import { BulletsSkeleton, CardsSkeleton } from '../components/Skeleton'
+import { getPreview } from '../lib/api'
 
 export default function Preview({ backendUrl, token }) {
   const [data, setData] = useState(null)
-  const [error, setError] = useState('')
-  const [policies, setPolicies] = useState([])
   const [loading, setLoading] = useState(true)
+  const [policies, setPolicies] = useState([])
 
   useEffect(() => {
-    const fetchData = async () => {
+    let mounted = true
+    async function run() {
       try {
-        const json = await getPreview(token)
-        setData(json)
-      } catch (e) {
-        setError(e.message)
+        const res = await getPreview(token)
+        if (mounted) setData(res)
+      } catch {
+        if (mounted) setData({ title:'World-Class Performance', subtitle:'Operational excellence preview', bullets:[] })
       } finally {
-        setLoading(false)
+        if (mounted) setLoading(false)
       }
     }
-    if (token) fetchData()
+    if (token) run(); else setLoading(false)
+    return () => { mounted = false }
   }, [token])
 
   useEffect(() => {
-    const fetchPolicies = async () => {
-      try {
-        const res = await fetch('/assets/policy/hashes.json')
-        if (!res.ok) return
-        const json = await res.json()
-        const files = Object.keys(json || {}).filter(name => name.endsWith('.pdf'))
-        setPolicies(files.slice(0, 5))
-      } catch {}
-    }
-    fetchPolicies()
+    // Load policy list from public assets
+    fetch('/assets/policy/hashes.json')
+      .then(r => r.ok ? r.json() : {})
+      .then(j => {
+        const names = Object.keys(j || {}).slice(0,5)
+        setPolicies(names)
+      })
+      .catch(() => setPolicies([]))
   }, [])
-
-  if (!token) {
-    return (
-      <div className="p-8 text-center">
-        <p className="text-gray-600">Please login to view the preview.</p>
-      </div>
-    )
-  }
 
   const sections = [
     { title: 'Weekly Inspection', description: 'Routine checks to ensure safety readiness', to: '/weekly-inspection' },
@@ -54,9 +45,12 @@ export default function Preview({ backendUrl, token }) {
     { title: 'Discrepancies', description: 'Track, assign, and resolve', to: '/discrepancies' },
   ]
 
+  if (!token) {
+    return <div className="p-8 text-center text-gray-600">Please login to view the preview.</div>
+  }
+
   return (
     <div>
-      {/* Hero */}
       <div className="relative isolate overflow-hidden bg-gradient-to-b from-white to-gray-50">
         <div className="mx-auto max-w-6xl px-6 pt-10 pb-4">
           <div className="flex items-center gap-3 mb-6">
@@ -68,7 +62,6 @@ export default function Preview({ backendUrl, token }) {
           </h1>
           <p className="mt-2 text-lg text-gray-600">{data?.subtitle || 'Operational excellence preview'}</p>
 
-          {/* Bullets */}
           {loading ? <BulletsSkeleton /> : (
             <div className="mt-6 grid gap-2 md:grid-cols-3">
               {(data?.bullets || []).map((b, i) => (
@@ -79,11 +72,9 @@ export default function Preview({ backendUrl, token }) {
               ))}
             </div>
           )}
-          {error && <div className="mt-2 text-sm text-red-600">{error}</div>}
         </div>
       </div>
 
-      {/* Sections */}
       <div className="mx-auto max-w-6xl px-6 pb-12">
         {loading ? <CardsSkeleton /> : (
           <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -93,7 +84,6 @@ export default function Preview({ backendUrl, token }) {
           </div>
         )}
 
-        {/* Policies */}
         <div className="mt-10 rounded-xl border bg-white p-6">
           <div className="flex items-center justify-between">
             <div>
@@ -101,18 +91,21 @@ export default function Preview({ backendUrl, token }) {
               <p className="text-sm text-gray-500">Reference documents for field teams</p>
             </div>
             {policies.length > 0 && (
-              <a href={`/assets/policy/${encodeURIComponent(policies[0])}`} target="_blank" rel="noreferrer" className="px-3 py-2 rounded-md bg-primary-600 text-white text-sm hover:bg-primary-700">Open Sample</a>
+              <a href={`/assets/policy/${policies[0]}`} target="_blank" rel="noreferrer"
+                 className="px-3 py-2 rounded-md bg-primary-600 text-white text-sm hover:bg-primary-700">
+                Open First
+              </a>
             )}
           </div>
-          {policies.length > 0 && (
-            <ul className="mt-4 grid sm:grid-cols-2 lg:grid-cols-3 gap-3 text-sm">
-              {policies.map((p) => (
-                <li key={p}>
-                  <a href={`/assets/policy/${encodeURIComponent(p)}`} target="_blank" rel="noreferrer" className="text-primary-700 hover:underline">{p}</a>
-                </li>
-              ))}
-            </ul>
-          )}
+          <ul className="mt-4 list-disc pl-6 text-sm text-gray-700">
+            {policies.map(name => (
+              <li key={name}>
+                <a className="text-primary-700 hover:underline" href={`/assets/policy/${name}`} target="_blank" rel="noreferrer">
+                  {name}
+                </a>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </div>
