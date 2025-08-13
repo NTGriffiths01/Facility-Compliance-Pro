@@ -11,6 +11,7 @@ from jose import JWTError, jwt
 from pydantic import BaseModel, EmailStr
 from passlib.context import CryptContext
 from motor.motor_asyncio import AsyncIOMotorClient
+from dotenv import load_dotenv
 
 # App and Security Config
 SECRET_KEY = os.environ.get("JWT_SECRET") or secrets.token_urlsafe(32)
