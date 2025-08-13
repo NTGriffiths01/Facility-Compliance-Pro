@@ -4,6 +4,7 @@ import Login from './pages/Login'
 import Preview from './pages/Preview'
 
 const backendUrl = (import.meta.env.REACT_APP_BACKEND_URL || '').replace(/\/$/, '')
+const backendReady = !!import.meta.env.REACT_APP_BACKEND_URL
 
 function useAuth() {
   const [token, setToken] = useState(() => localStorage.getItem('token'))
