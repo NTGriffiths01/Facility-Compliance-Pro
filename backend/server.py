@@ -30,6 +30,7 @@ app.add_middleware(
 )
 
 # Database Setup
+load_dotenv()
 MONGO_URL = os.environ.get("MONGO_URL")
 if not MONGO_URL:
     # Fail fast if DB URL missing
