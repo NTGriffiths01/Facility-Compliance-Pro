@@ -1,25 +1,40 @@
 import React, { useEffect, useState } from 'react'
 import SectionCard from '../components/SectionCard'
+import { getPreview } from '../lib/api'
+import { BulletsSkeleton, CardsSkeleton } from '../components/Skeleton'
 
 export default function Preview({ backendUrl, token }) {
   const [data, setData] = useState(null)
   const [error, setError] = useState('')
+  const [policies, setPolicies] = useState([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch(`${backendUrl}/preview`, {
-          headers: { Authorization: `Bearer ${token}` }
-        })
-        if (!res.ok) throw new Error('Failed to load preview')
-        const json = await res.json()
+        const json = await getPreview(token)
         setData(json)
       } catch (e) {
         setError(e.message)
+      } finally {
+        setLoading(false)
       }
     }
     if (token) fetchData()
-  }, [backendUrl, token])
+  }, [token])
+
+  useEffect(() => {
+    const fetchPolicies = async () => {
+      try {
+        const res = await fetch('/assets/policy/hashes.json')
+        if (!res.ok) return
+        const json = await res.json()
+        const files = Object.keys(json || {}).filter(name => name.endsWith('.pdf'))
+        setPolicies(files.slice(0, 5))
+      } catch {}
+    }
+    fetchPolicies()
+  }, [])
 
   if (!token) {
     return (
@@ -54,34 +69,50 @@ export default function Preview({ backendUrl, token }) {
           <p className="mt-2 text-lg text-gray-600">{data?.subtitle || 'Operational excellence preview'}</p>
 
           {/* Bullets */}
-          <div className="mt-6 grid gap-2 md:grid-cols-3">
-            {(data?.bullets || []).map((b, i) => (
-              <div key={i} className="flex items-center gap-3 rounded-lg border bg-white p-3">
-                <span className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-primary-100 text-primary-700 text-sm font-semibold">{i+1}</span>
-                <span className="text-gray-700 text-sm">{b}</span>
-              </div>
-            ))}
-          </div>
+          {loading ? <BulletsSkeleton /> : (
+            <div className="mt-6 grid gap-2 md:grid-cols-3">
+              {(data?.bullets || []).map((b, i) => (
+                <div key={i} className="flex items-center gap-3 rounded-lg border bg-white p-3">
+                  <span className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-primary-100 text-primary-700 text-sm font-semibold">{i+1}</span>
+                  <span className="text-gray-700 text-sm">{b}</span>
+                </div>
+              ))}
+            </div>
+          )}
+          {error && <div className="mt-2 text-sm text-red-600">{error}</div>}
         </div>
       </div>
 
       {/* Sections */}
       <div className="mx-auto max-w-6xl px-6 pb-12">
-        <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {sections.map((s) => (
-            <SectionCard key={s.title} title={s.title} description={s.description} to={s.to} />
-          ))}
-        </div>
+        {loading ? <CardsSkeleton /> : (
+          <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {sections.map((s) => (
+              <SectionCard key={s.title} title={s.title} description={s.description} to={s.to} />
+            ))}
+          </div>
+        )}
 
-        {/* Policy quick access */}
+        {/* Policies */}
         <div className="mt-10 rounded-xl border bg-white p-6">
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-lg font-semibold text-gray-800">Policies</h2>
               <p className="text-sm text-gray-500">Reference documents for field teams</p>
             </div>
-            <a href="/assets/policy/730 - Accessible.pdf" target="_blank" rel="noreferrer" className="px-3 py-2 rounded-md bg-primary-600 text-white text-sm hover:bg-primary-700">Open Sample</a>
+            {policies.length > 0 && (
+              <a href={`/assets/policy/${encodeURIComponent(policies[0])}`} target="_blank" rel="noreferrer" className="px-3 py-2 rounded-md bg-primary-600 text-white text-sm hover:bg-primary-700">Open Sample</a>
+            )}
           </div>
+          {policies.length > 0 && (
+            <ul className="mt-4 grid sm:grid-cols-2 lg:grid-cols-3 gap-3 text-sm">
+              {policies.map((p) => (
+                <li key={p}>
+                  <a href={`/assets/policy/${encodeURIComponent(p)}`} target="_blank" rel="noreferrer" className="text-primary-700 hover:underline">{p}</a>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
       </div>
     </div>

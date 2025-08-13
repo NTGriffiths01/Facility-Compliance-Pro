@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { login as apiLogin } from '../lib/api'
 
 export default function Login({ backendUrl, onLogin }) {
   const [email, setEmail] = useState('Nolan.Griffiths@doc.state.ma.us')
@@ -13,16 +14,7 @@ export default function Login({ backendUrl, onLogin }) {
     setLoading(true)
     setError('')
     try {
-      const res = await fetch(`${backendUrl}/auth/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
-      })
-      if (!res.ok) {
-        const t = await res.text()
-        throw new Error(t || 'Login failed')
-      }
-      const data = await res.json()
+      const data = await apiLogin(email, password)
       onLogin(data.access_token)
       navigate('/preview')
     } catch (err) {
