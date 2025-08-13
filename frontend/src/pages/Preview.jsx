@@ -30,13 +30,13 @@ export default function Preview({ backendUrl, token }) {
   }
 
   const sections = [
-    { title: 'Weekly Inspection', description: 'Routine checks to ensure safety readiness' },
-    { title: 'Monthly Inspection', description: 'Structured monthly assessments' },
-    { title: 'Fire Watch', description: 'Monitoring and incident readiness' },
-    { title: 'Policy', description: 'Access organizational policies and compliance' },
-    { title: 'Functional Testing', description: 'Validate systems performance' },
-    { title: 'Hot Work', description: 'Permit tracking and controls' },
-    { title: 'Discrepancies', description: 'Track, assign, and resolve' },
+    { title: 'Weekly Inspection', description: 'Routine checks to ensure safety readiness', to: '/weekly-inspection' },
+    { title: 'Monthly Inspection', description: 'Structured monthly assessments', to: '/monthly-inspection' },
+    { title: 'Fire Watch', description: 'Monitoring and incident readiness', to: '/fire-watch' },
+    { title: 'Policy', description: 'Access organizational policies and compliance', to: '/policy' },
+    { title: 'Functional Testing', description: 'Validate systems performance', to: '/functional-testing' },
+    { title: 'Hot Work', description: 'Permit tracking and controls', to: '/hot-work' },
+    { title: 'Discrepancies', description: 'Track, assign, and resolve', to: '/discrepancies' },
   ]
 
   return (
@@ -69,7 +69,7 @@ export default function Preview({ backendUrl, token }) {
       <div className="mx-auto max-w-6xl px-6 pb-12">
         <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {sections.map((s) => (
-            <SectionCard key={s.title} title={s.title} description={s.description} />
+            <SectionCard key={s.title} title={s.title} description={s.description} to={s.to} />
           ))}
         </div>
 

@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { Routes, Route, useNavigate, Link } from 'react-router-dom'
 import Login from './pages/Login'
 import Preview from './pages/Preview'
+import WeeklyInspection from './pages/WeeklyInspection'
+import MonthlyInspection from './pages/MonthlyInspection'
 
 const backendUrl = (import.meta.env.REACT_APP_BACKEND_URL || '').replace(/\/$/, '')
 
@@ -20,9 +22,11 @@ function Navbar({ onLogout }) {
           <img src="/assets/apps/web/public/icon-192.png" alt="" className="h-6 w-6 rounded" />
           <span className="font-semibold text-primary-700">WorldClass</span>
         </Link>
-        <div className="flex items-center gap-3">
-          <Link to="/preview" className="text-sm text-primary-700 hover:underline">Preview</Link>
-          <button onClick={onLogout} className="px-3 py-1.5 text-sm bg-primary-600 text-white rounded hover:bg-primary-700">Logout</button>
+        <div className="flex items-center gap-4 text-sm">
+          <Link to="/preview" className="text-primary-700 hover:underline">Preview</Link>
+          <Link to="/weekly-inspection" className="text-gray-600 hover:text-primary-700">Weekly</Link>
+          <Link to="/monthly-inspection" className="text-gray-600 hover:text-primary-700">Monthly</Link>
+          <button onClick={onLogout} className="px-3 py-1.5 bg-primary-600 text-white rounded hover:bg-primary-700">Logout</button>
         </div>
       </div>
     </div>
@@ -42,6 +46,8 @@ export default function App() {
       <Routes>
         <Route path="/login" element={<Login backendUrl={backendUrl} onLogin={login} />} />
         <Route path="/preview" element={<Preview backendUrl={backendUrl} token={token} />} />
+        <Route path="/weekly-inspection" element={<WeeklyInspection />} />
+        <Route path="/monthly-inspection" element={<MonthlyInspection />} />
         <Route path="/" element={<Preview backendUrl={backendUrl} token={token} />} />
       </Routes>
       <footer className="text-center text-xs text-gray-500 py-6">© {new Date().getFullYear()} WorldClass</footer>
