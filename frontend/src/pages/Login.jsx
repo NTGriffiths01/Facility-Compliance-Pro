@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 export default function Login({ backendUrl, onLogin }) {
   const [email, setEmail] = useState('Nolan.Griffiths@doc.state.ma.us')
   const [password, setPassword] = useState('Admin123')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const navigate = useNavigate()
 
   const submit = async (e) => {
     e.preventDefault()
@@ -16,9 +18,13 @@ export default function Login({ backendUrl, onLogin }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
       })
-      if (!res.ok) throw new Error('Login failed')
+      if (!res.ok) {
+        const t = await res.text()
+        throw new Error(t || 'Login failed')
+      }
       const data = await res.json()
       onLogin(data.access_token)
+      navigate('/preview')
     } catch (err) {
       setError(err.message)
     } finally {
