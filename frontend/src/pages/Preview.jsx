@@ -7,7 +7,7 @@ export default function Preview({ backendUrl, token }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch(`${backendUrl}/api/preview`, {
+        const res = await fetch(`${backendUrl}/preview`, {
           headers: { Authorization: `Bearer ${token}` }
         })
         if (!res.ok) throw new Error('Failed to load preview')
