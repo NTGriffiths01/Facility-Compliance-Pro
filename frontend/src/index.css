@@ -2,9 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  color-scheme: light;
-}
-
-html, body, #root { height: 100%; }
-body { @apply bg-gray-50; font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, 'Apple Color Emoji', 'Segoe UI Emoji'; }
+:root { color-scheme: light; }
+body { @apply bg-gray-50 text-gray-900; font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, 'Apple Color Emoji', 'Segoe UI Emoji'; }
+a { @apply text-primary-700; }
+button { @apply focus:outline-none focus:ring-2 focus:ring-primary-400; }

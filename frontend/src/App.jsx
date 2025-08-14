@@ -4,6 +4,11 @@ import Login from './pages/Login'
 import Preview from './pages/Preview'
 import WeeklyInspection from './pages/WeeklyInspection'
 import MonthlyInspection from './pages/MonthlyInspection'
+import Policy from './pages/Policy'
+import FireWatch from './pages/FireWatch'
+import FunctionalTesting from './pages/FunctionalTesting'
+import HotWork from './pages/HotWork'
+import Discrepancies from './pages/Discrepancies'
 
 const backendUrl = (import.meta.env.REACT_APP_BACKEND_URL || '').replace(/\/$/, '')
 
@@ -20,12 +25,17 @@ function Navbar({ onLogout }) {
       <div className="max-w-6xl mx-auto flex items-center justify-between py-3 px-4">
         <Link to="/" className="flex items-center gap-2">
           <img src="/assets/apps/web/public/icon-192.png" alt="" className="h-6 w-6 rounded" />
-          <span className="font-semibold text-primary-700">WorldClass</span>
+          <span className="font-semibold text-primary-700">Facility Compliance Pro</span>
         </Link>
         <div className="flex items-center gap-4 text-sm">
           <Link to="/preview" className="text-primary-700 hover:underline">Preview</Link>
           <Link to="/weekly-inspection" className="text-gray-600 hover:text-primary-700">Weekly</Link>
           <Link to="/monthly-inspection" className="text-gray-600 hover:text-primary-700">Monthly</Link>
+          <Link to="/policy" className="text-gray-600 hover:text-primary-700">Policy</Link>
+          <Link to="/fire-watch" className="text-gray-600 hover:text-primary-700">Fire Watch</Link>
+          <Link to="/functional-testing" className="text-gray-600 hover:text-primary-700">Testing</Link>
+          <Link to="/hot-work" className="text-gray-600 hover:text-primary-700">Hot Work</Link>
+          <Link to="/discrepancies" className="text-gray-600 hover:text-primary-700">Discrepancies</Link>
           <button onClick={onLogout} className="px-3 py-1.5 bg-primary-600 text-white rounded hover:bg-primary-700">Logout</button>
         </div>
       </div>
@@ -48,9 +58,14 @@ export default function App() {
         <Route path="/preview" element={<Preview backendUrl={backendUrl} token={token} />} />
         <Route path="/weekly-inspection" element={<WeeklyInspection />} />
         <Route path="/monthly-inspection" element={<MonthlyInspection />} />
+        <Route path="/policy" element={<Policy />} />
+        <Route path="/fire-watch" element={<FireWatch />} />
+        <Route path="/functional-testing" element={<FunctionalTesting />} />
+        <Route path="/hot-work" element={<HotWork />} />
+        <Route path="/discrepancies" element={<Discrepancies />} />
         <Route path="/" element={<Preview backendUrl={backendUrl} token={token} />} />
       </Routes>
-      <footer className="text-center text-xs text-gray-500 py-6">© {new Date().getFullYear()} WorldClass</footer>
+      <footer className="text-center text-xs text-gray-500 py-6">© {new Date().getFullYear()} Facility Compliance Pro</footer>
     </div>
   )
 }

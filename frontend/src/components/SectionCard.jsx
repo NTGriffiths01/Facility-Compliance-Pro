@@ -14,6 +14,5 @@ export default function SectionCard({ title, description, icon = '/assets/apps/w
       <div className="bg-gradient-to-r from-primary-50/60 to-transparent h-1 w-full" />
     </div>
   )
-
   return to ? <Link to={to} className="block">{content}</Link> : content
 }

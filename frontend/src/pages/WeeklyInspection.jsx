@@ -7,9 +7,8 @@ export default function WeeklyInspection() {
         <h1 className="text-2xl font-bold text-gray-800">Weekly Inspection</h1>
         <p className="text-gray-500">Routine checks to ensure safety readiness</p>
       </header>
-
       <div className="rounded-xl border bg-white p-6">
-        <p className="text-gray-600">This is a placeholder for weekly inspection workflows. We can port forms and lists from assets in the next step.</p>
+        <p className="text-gray-600">Placeholder. Next: pixel‑true Attachment #2 with autosave, photos, QR.</p>
       </div>
     </div>
   )

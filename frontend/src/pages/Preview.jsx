@@ -15,7 +15,7 @@ export default function Preview({ backendUrl, token }) {
         const res = await getPreview(token)
         if (mounted) setData(res)
       } catch {
-        if (mounted) setData({ title:'World-Class Performance', subtitle:'Operational excellence preview', bullets:[] })
+        if (mounted) setData({ title:'Facility Compliance Pro', subtitle:'Operational compliance preview', bullets:[] })
       } finally {
         if (mounted) setLoading(false)
       }
@@ -25,7 +25,6 @@ export default function Preview({ backendUrl, token }) {
   }, [token])
 
   useEffect(() => {
-    // Load policy list from public assets
     fetch('/assets/policy/hashes.json')
       .then(r => r.ok ? r.json() : {})
       .then(j => {
@@ -55,12 +54,12 @@ export default function Preview({ backendUrl, token }) {
         <div className="mx-auto max-w-6xl px-6 pt-10 pb-4">
           <div className="flex items-center gap-3 mb-6">
             <img src="/assets/apps/web/public/icon-192.png" alt="" className="h-8 w-8 rounded" />
-            <span className="text-sm font-medium text-primary-700">WorldClass</span>
+            <span className="text-sm font-medium text-primary-700">Facility Compliance Pro</span>
           </div>
           <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-gray-900">
-            {data?.title || 'World-Class Performance'}
+            {data?.title || 'Facility Compliance Pro'}
           </h1>
-          <p className="mt-2 text-lg text-gray-600">{data?.subtitle || 'Operational excellence preview'}</p>
+          <p className="mt-2 text-lg text-gray-600">{data?.subtitle || 'Operational compliance preview'}</p>
 
           {loading ? <BulletsSkeleton /> : (
             <div className="mt-6 grid gap-2 md:grid-cols-3">
@@ -92,7 +91,7 @@ export default function Preview({ backendUrl, token }) {
             </div>
             {policies.length > 0 && (
               <a href={`/assets/policy/${policies[0]}`} target="_blank" rel="noreferrer"
-                 className="px-3 py-2 rounded-md bg-primary-600 text-white text-sm hover:bg-primary-700">
+                className="px-3 py-2 rounded-md bg-primary-600 text-white text-sm hover:bg-primary-700">
                 Open First
               </a>
             )}

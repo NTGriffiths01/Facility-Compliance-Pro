@@ -7,9 +7,8 @@ export default function MonthlyInspection() {
         <h1 className="text-2xl font-bold text-gray-800">Monthly Inspection</h1>
         <p className="text-gray-500">Structured monthly assessments</p>
       </header>
-
       <div className="rounded-xl border bg-white p-6">
-        <p className="text-gray-600">This is a placeholder for monthly inspection assessments. We will wire designs and data next.</p>
+        <p className="text-gray-600">Placeholder. Next: Attachment #7 packet, pump report, synopsis, PDF.</p>
       </div>
     </div>
   )
